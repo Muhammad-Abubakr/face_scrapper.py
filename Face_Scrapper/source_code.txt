@@ -1,6 +1,7 @@
 import cv2
 import sys
 import os, os.path
+from PIL import Image
 
 image_path = sys.argv[1]
 output_path = sys.argv[2]
@@ -12,31 +13,35 @@ else:
 
 try:
 	for img in os.listdir(f'{image_path}/'):
-		image = cv2.imread(f'{image_path}/{img}')
-		gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+		if img.endswith('.jpg') or img.endswith('.png') or img.endswith('.webp') or img.endswith('.jpeg'):
+			image = cv2.imread(f'{image_path}/{img}')
+			gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-		faceCascade = cv2.CascadeClassifier(
-		    cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-		faces = faceCascade.detectMultiScale(
-		    gray,
-		    scaleFactor=1.3,
-		    minNeighbors=3,
-		    minSize=(30, 30)
-		)
+			faceCascade = cv2.CascadeClassifier(
+			    cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+			faces = faceCascade.detectMultiScale(
+			    gray,
+			    scaleFactor=1.3,
+			    minNeighbors=3,
+			    minSize=(30, 30)
+			)
 
-		print("Found {0} Faces!".format(len(faces)))
+			print(f"Found {len(faces)} Faces!")
 
-		i = 0
-		for (x, y, w, h) in faces:
-		    crop_img = image[y:y+h, x:x+w]
-		    i = i+1
-		    if os.path.exists(f'{image_path}/{output_path}/{img}'):
-		    	pass
-		    else:
-		    	os.makedirs(f'{image_path}/{output_path}/{img}')
-		    	
-		    status = cv2.imwrite(f'{image_path}/{output_path}/{img}/{str(i)}.jpg', crop_img)
-		    print('done!')
+			i = 0
+			for (x, y, w, h) in faces:
+			    crop_img = image[y:y+h, x:x+w]
+			    i = i+1
+			    if os.path.exists(f'{image_path}/{output_path}/{img}'):
+			    	pass
+			    else:
+			    	os.makedirs(f'{image_path}/{output_path}/{img}')
+			    	
+			    status = cv2.imwrite(f'{image_path}/{output_path}/{img}/{str(i)}.png', crop_img)
+			    print('done!')
+			    continue
+		continue
 
 except:
 	print("[INFO] Image faces_detected.jpg written to filesystem: ", status)
+
