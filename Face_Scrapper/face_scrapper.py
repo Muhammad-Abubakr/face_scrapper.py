@@ -1,3 +1,4 @@
+
 import cv2
 import sys
 import os, os.path
@@ -6,13 +7,15 @@ try:
     image_path = sys.argv[1]
     output_path = sys.argv[2]
 
+    formats = ('.jpg', '.png', '.jpeg', '.webp')
+
     if os.path.exists(f'{image_path}/{output_path}'):
     	pass
     else:
     	os.makedirs(f'{image_path}/{output_path}')
 
     for img in os.listdir(f'{image_path}/'):
-	    if img.endswith('.jpg') or img.endswith('.png') or img.endswith('.webp') or img.endswith('.jpeg'):
+	    if img.endswith(formats):
 	        image = cv2.imread(f'{image_path}/{img}')
 	        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -43,6 +46,8 @@ try:
 	            continue
 	    else:
 	    	print('No images to process in the given directory!')
+
+	    print('All tasks Completed successfully :D')
 	    continue
 except:
     print('Enter the Command like following : \n python3 face_scrapper.py {Image_Path} {New_Folder_Name} \n . \n . \n . \n Attention! Enter the path without {}, {} are only for user understanding :)')
