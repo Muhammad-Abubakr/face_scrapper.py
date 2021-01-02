@@ -10,46 +10,49 @@ try:
     formats = ('.jpg', '.png', '.jpeg', '.webp')
 
     if os.path.exists(f'{image_path}/{output_path}'):
-    	pass
+        pass
     else:
-    	os.makedirs(f'{image_path}/{output_path}')
+        os.makedirs(f'{image_path}/{output_path}')
 
     for img in os.listdir(f'{image_path}/'):
-	    if img.endswith(formats):
-	        image = cv2.imread(f'{image_path}/{img}')
-	        gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-	        faceCascade = cv2.CascadeClassifier(
-	            cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
-	        faces = faceCascade.detectMultiScale(
-	            gray,
-	            scaleFactor=1.3,
-	            minNeighbors=3,
-	            minSize=(30, 30)
-	        )
+        if img.endswith(formats):
+            image = cv2.imread(f'{image_path}/{img}')
+            gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-	        print(f"Found {len(faces)} Faces!")
+            faceCascade = cv2.CascadeClassifier(
+                cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+            faces = faceCascade.detectMultiScale(
+                gray,
+                scaleFactor=1.39,
+                minNeighbors=3,
+                minSize=(35, 35)
+            )
 
-	        i = 0
-	        for (x, y, w, h) in faces:
-	            crop_img = image[y:y+h, x:x+w]
+            print(f'Processing {img}....!')
 
-	            if os.path.exists(f'{image_path}/{output_path}/{img}'):
-	                pass
-	            else:
-	                os.makedirs(f'{image_path}/{output_path}/{img}')
+            print(f"Found {len(faces)} Faces!")
 
-	            status = cv2.imwrite(f'{image_path}/{output_path}/{img}/{str(i)}.png', crop_img)
+            i = 0
+            for (x, y, w, h) in faces:
+                crop_img = image[y:y+h, x:x+w]
 
-	            i = i+1
-	            print('done!')
-	            continue
-	    else:
-	    	print('No images to process in the given directory!')
+                if os.path.exists(f'{image_path}/{output_path}/{img}'):
+                    pass
+                else:
+                    os.makedirs(f'{image_path}/{output_path}/{img}')
 
-	    print('All tasks Completed successfully :D')
-	    continue
+                status = cv2.imwrite(f'{image_path}/{output_path}/{img}/{str(i)}.png', crop_img)
+                i = i+1
+                continue
+            print('All tasks Completed')
+
+        else:
+        	print('No Images Found in the given directory!')
+        
+        continue
+
 except:
-    print('Enter the Command like following : \n python3 face_scrapper.py {Image_Path} {New_Folder_Name} \n . \n . \n . \n Attention! Enter the path without {}, {} are only for user understanding :)')
-
+    print(
+        'Enter the Command like following : \n python3 face_scrapper.py {Image_Path} {New_Folder_Name} \n . \n . \n . \n Attention! Enter the path without {}, {} are only for user understanding :)')
 
